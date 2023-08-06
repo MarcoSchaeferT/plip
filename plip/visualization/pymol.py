@@ -61,6 +61,14 @@ class PyMOLVisualizer:
         cmd.set_color('myblue', '[43, 131, 186]')
         cmd.set_color('mylightblue', '[158, 202, 225]')
         cmd.set_color('mylightgreen', '[229, 245, 224]')
+        # InVADo colors
+        cmd.set_color('HBonds_col', '[103.785, 49.98, 167.79]')
+        cmd.set_color('halogenBonds_col', '[55.08, 125.97, 184.11]')
+        cmd.set_color('hydrophobicInteractions_col', '[77.01, 174.93, 73.95]')
+        cmd.set_color('metalComplexes_col', '[166.0, 86.0, 40]')
+        cmd.set_color('piCationInteractions_col', '[255, 126.99, 0]')
+        cmd.set_color('piStacks_col', '[245, 221, 25]')
+        cmd.set_color('saltBridges_col', '[226.95, 26.01, 28.05]')
 
     @staticmethod
     def select_by_ids(selname, idlist, selection_exists=False, chunksize=20, restrict=None):
@@ -95,7 +103,7 @@ class PyMOLVisualizer:
                 cmd.distance('Hydrophobic', 'tmp_bs', 'tmp_lig')
             if self.object_exists('Hydrophobic'):
                 cmd.set('dash_gap', 0.5, 'Hydrophobic')
-                cmd.set('dash_color', 'grey50', 'Hydrophobic')
+                cmd.set('dash_color', 'hydrophobicInteractions_col', 'Hydrophobic')
         else:
             cmd.select('Hydrophobic-P', 'None')
 
@@ -119,7 +127,7 @@ class PyMOLVisualizer:
             cmd.select('tmp_lig', 'id %i & %s' % (i[0], self.ligname))
             cmd.distance('HBonds', 'tmp_bs', 'tmp_lig')
         if self.object_exists('HBonds'):
-            cmd.set('dash_color', 'blue', 'HBonds')
+            cmd.set('dash_color', 'HBonds_col', 'HBonds')
 
     def show_halogen(self):
         """Visualize halogen bonds."""
@@ -136,7 +144,7 @@ class PyMOLVisualizer:
             self.select_by_ids('HalogenAccept', all_acc_o, restrict=self.protname)
             self.select_by_ids('HalogenDonor', all_don_x, restrict=self.ligname)
         if self.object_exists('HalogenBonds'):
-            cmd.set('dash_color', 'greencyan', 'HalogenBonds')
+            cmd.set('dash_color', 'halogenBonds_col', 'HalogenBonds')
 
     def show_stacking(self):
         """Visualize pi-stacking interactions."""
@@ -159,11 +167,11 @@ class PyMOLVisualizer:
             if stack.type == 'T':
                 cmd.distance('PiStackingT', 'ps-pistack-1-%i' % i, 'ps-pistack-2-%i' % i)
         if self.object_exists('PiStackingP'):
-            cmd.set('dash_color', 'green', 'PiStackingP')
+            cmd.set('dash_color', 'piStacks_col', 'PiStackingP')
             cmd.set('dash_gap', 0.3, 'PiStackingP')
             cmd.set('dash_length', 0.6, 'PiStackingP')
         if self.object_exists('PiStackingT'):
-            cmd.set('dash_color', 'smudge', 'PiStackingT')
+            cmd.set('dash_color', 'piStacks_col', 'PiStackingT')
             cmd.set('dash_gap', 0.3, 'PiStackingT')
             cmd.set('dash_length', 0.6, 'PiStackingT')
 
@@ -188,7 +196,7 @@ class PyMOLVisualizer:
                     cmd.select('PosCharge-L', 'PosCharge-L or (id %i & %s)' % (a, self.ligname))
             cmd.distance('PiCation', 'ps-picat-1-%i' % i, 'ps-picat-2-%i' % i)
         if self.object_exists('PiCation'):
-            cmd.set('dash_color', 'orange', 'PiCation')
+            cmd.set('dash_color', 'piCationInteractions_col', 'PiCation')
             cmd.set('dash_gap', 0.3, 'PiCation')
             cmd.set('dash_length', 0.6, 'PiCation')
 
@@ -217,7 +225,7 @@ class PyMOLVisualizer:
                 cmd.distance('Saltbridges', 'ps-sbp-1-%i' % i, 'ps-sbp-2-%i' % i)
 
         if self.object_exists('Saltbridges'):
-            cmd.set('dash_color', 'yellow', 'Saltbridges')
+            cmd.set('dash_color', 'saltBridges_col', 'Saltbridges')
             cmd.set('dash_gap', 0.5, 'Saltbridges')
 
     def show_wbridges(self):
@@ -262,7 +270,7 @@ class PyMOLVisualizer:
                 cmd.distance('MetalComplexes', 'tmp_m', 'tmp_t')
                 cmd.delete('tmp_m or tmp_t')
         if self.object_exists('MetalComplexes'):
-            cmd.set('dash_color', 'violetpurple', 'MetalComplexes')
+            cmd.set('dash_color', 'metalComplexes_col', 'MetalComplexes')
             cmd.set('dash_gap', 0.5, 'MetalComplexes')
             # Show water molecules for metal complexes
             cmd.show('spheres', 'Metal-W')
